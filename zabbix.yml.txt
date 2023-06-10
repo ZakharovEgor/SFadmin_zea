@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+     - name: install zabbix-agent on Ubuntu
+      apt:
+        name: zabbix-agent
+        state: latest
+
+    - name: start zabbix-agent and enable
+      service:
+        name: zabbix-agent
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: restart zabbix-agent
+      service:
+        name: zabbix-agent
+        state: restarted
+
+

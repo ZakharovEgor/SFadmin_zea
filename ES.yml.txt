@@ -1,0 +1,33 @@
+---
+- hosts: ubuntu3.my
+  roles:
+    - role: elastic.elasticsearch
+  vars:
+    es_config:
+      cluster.name: "test-cluster"
+      discovery.seed_hosts: "elastic02:9300"
+      http.host: 0.0.0.0
+      http.port: 9200
+      node.data: true
+      node.master: false
+      transport.host: 0.0.0.0
+      transport.port: 9300
+      bootstrap.memory_lock: false
+    es_plugins:
+      - plugin: ingest-attachment
+
+  handlers:
+	- name: reload systemd configuration
+  	  become: yes
+ 	  systemd:
+   		 daemon_reload: true
+
+# Restart service and ensure it is enabled
+
+	- name: restart elasticsearch
+  	  become: yes
+  	  service: name=elasticsearch state=restarted enabled=yes
+  		when:
+   		 - es_restart_on_change
+    		 - es_start_service
+  		  register: es_restarted

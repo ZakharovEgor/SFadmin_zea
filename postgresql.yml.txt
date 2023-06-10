@@ -1,0 +1,21 @@
+---
+- hosts: ubuntu3.my
+  become: yes
+
+  tasks:
+    - name: postgresql-12
+     apt: 
+      name: postgresql-12
+      state: latest
+
+    - name: start postgresql-12 and enable
+      service:
+        name: postgresql-12
+        state: started
+        enabled: yes
+
+  handlers:
+   - name: Ensure that postgresql is started
+     service:
+      name: postgresql-12
+      state: started 

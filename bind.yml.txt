@@ -1,0 +1,15 @@
+---
+- hosts: ubuntu2.my
+  become: yes
+  tasks:
+	- name: Install Bind on Debian Family
+  	apt:
+   		 name: "{{ item }}"
+    		 state: present
+
+  handlers:
+	- name: bind systemd
+  	systemd:
+   		 name: named
+   		 enabled: yes
+    		 state: started
